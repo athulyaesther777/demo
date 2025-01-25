@@ -1,0 +1,33 @@
+import pandas as pd
+import nltk
+from nltk.sentiment import SentimentIntensityAnalyzer
+
+# Download necessary NLTK data
+nltk.download('vader_lexicon')
+
+# Initialize Sentiment Intensity Analyzer
+sia = SentimentIntensityAnalyzer()
+
+# Load conversation dataset
+try:
+    conversation_df = pd.read_csv('Conversation.csv', encoding='latin1')  # Change encoding if needed
+    print("Columns in Conversation.csv:", conversation_df.columns)  # Debugging: Display column names
+except Exception as e:
+    print(f"Error loading Conversation.csv: {e}")
+    exit()
+
+# Check and assign proper column names
+if 'Question' not in conversation_df.columns or 'Answer' not in conversation_df.columns:
+    print("Adjusting column names...")
+    conversation_df.columns = ['Question', 'Answer']
+
+# Convert to dictionary
+try:
+    conversation_dict = dict(zip(conversation_df['Question'], conversation_df['Answer']))
+except KeyError as e:
+    print(f"KeyError: {e}")
+    print("Ensure the CSV file contains 'Question' and 'Answer' columns.")
+    exit()
+
+# Test output
+print("Conversation dictionary loaded successfully!")
